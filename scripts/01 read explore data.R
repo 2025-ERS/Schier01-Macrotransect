@@ -19,3 +19,10 @@ library(tidyverse) # load the tidyverse libraries, including readr and ggplot2
 
 
 #-----------------------02 Read the tables from the database -----------------------
+# import MetTables from 01-Macrotransect-Elevation
+mettableslink <- "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4C7olgh28MHskOjCIQGYlY8v5z1sxza9XaCccwITnjoafF_1Ntfyl1g7ngQt4slnQlseWT6Fk3naB/pub?gid=972536062&single=true&output=csv"
+
+mettables <- readr::read_csv(mettableslink)
+
+
+
