@@ -24,5 +24,11 @@ mettableslink <- "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4C7olgh28MHs
 
 mettables <- readr::read_csv(mettableslink)
 
+#import FactElevation
+factelevlink <- mettables |>
+  dplyr::filter(Data_Table=="FactElevation") |>
+  pull(`gid_for_reading _in_R`)
+
+elevdat <- readr::read_csv(factelevlink)
 
 
