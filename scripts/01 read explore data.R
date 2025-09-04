@@ -39,6 +39,21 @@ elevdat |>
   geom_point() +
   facet_grid(rows=vars(year))
 
+elevdat |>
+  ggplot(mapping = aes(x = distance_rtk_m,
+                       y = elevation_m,
+                       color = as.factor(year))) +
+  geom_line() +
+  coord_cartesian(xlim=c(100,300),
+                  ylim=c(1,3))
+
+elevdat |>
+  filter(year==2024) |>
+  ggplot(mapping = aes(x = distance_rtk_m,
+                       y = elevation_m)) +
+  #geom_point(alpha=.1) +
+  geom_line()
+
 
 
 
