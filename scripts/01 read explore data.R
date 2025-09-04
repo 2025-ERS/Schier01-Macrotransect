@@ -31,4 +31,15 @@ factelevlink <- mettables |>
 
 elevdat <- readr::read_csv(factelevlink)
 
+#-----------------------03 Exploratory Plots of Transect Elevation -----------------------
+# basic plot of elevation down transect
+elevdat |>
+  ggplot(mapping = aes(x = distance_rtk_m,
+                       y = elevation_m)) +
+  geom_point() +
+  facet_grid(rows=vars(year))
+
+
+
+
 
