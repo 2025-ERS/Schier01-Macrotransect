@@ -43,16 +43,17 @@ elevdat |>
   ggplot(mapping = aes(x = distance_rtk_m,
                        y = elevation_m,
                        color = as.factor(year))) +
-  geom_line() +
-  coord_cartesian(xlim=c(100,425))
+  geom_line() #+
+  #coord_cartesian(xlim=c(100,425))
 
 elevdat |>
-  filter(year==2024) |>
+  #filter(year==2024) |>
   ggplot(mapping = aes(x = distance_rtk_m,
-                       y = elevation_m)) +
-  geom_point(alpha=.5) +
+                       y = elevation_m,
+                       color=as.factor(year))) +
+  #geom_point(alpha=.5) +
   geom_line() +
-  coord_cartesian(xlim=c(100,425))
+  coord_cartesian(xlim=c(150,250))
 
 
 
