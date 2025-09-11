@@ -297,10 +297,37 @@ elevdata |>
 
 
 
+#-----------------------05 Basic Exploratory Plots -----------------------------------
+# calculate the mean of the elevation data in 2025
+elevdata |>
+  mean.default(distance_rtk_m, year==2025)
 
+# calculate the mean of the elevation data in 2025
+elevdata |>
+  mean(distance_rtk_m, year==2025)
 
+# calculate the mean of the elevation data in 2025
+elevdata(dplyr) |>
+  filter(Year == 2025) %>%
+  summarise(mean_elevation = mean(Elevation, na.rm = TRUE))
 
+# Calculate mean elevation for 2025
+mean_elev_2025 <- elevdata |>
+  filter(year == 2025) |>
+  summarise(mean_elevation = mean(elevation_m, na.rm = TRUE))
 
+# Print result
+print(mean_elev_2025)
+
+# Calculate mean elevation for 2024
+mean_elev_2024 <- elevdata |>
+  filter(year == 2024) |>
+  summarise(mean_elevation = mean(elevation_m, na.rm = TRUE))
+
+# Calculate mean elevation for 2018
+mean_elev_2018 <- elevdata |>
+  filter(year == 2018) |>
+  summarise(mean_elevation = mean(elevation_m, na.rm = TRUE))
 
 
 
