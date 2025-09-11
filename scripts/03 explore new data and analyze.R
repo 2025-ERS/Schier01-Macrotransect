@@ -14,6 +14,8 @@ if (!requireNamespace("renv", quietly = TRUE)) {install.packages("renv")}
 library(renv)
 # restore the library versions from the lock file
 renv::restore() 
+
+if (!requireNamespace("ggrepel", quietly = TRUE)) {install.packages("ggrepel")}
 # Load the libraries that you will use in this script. Only load the libraries that you will actually use!
 library(tidyverse)
 library(ggrepel)# load the tidyverse libraries, including readr and ggplot2
