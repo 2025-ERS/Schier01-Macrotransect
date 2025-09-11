@@ -41,6 +41,25 @@ elevdata |>
                        y = elevation_m)) +
   geom_line()
 
+#first look at all years elevation data
+elevdata |>
+  ggplot(mapping = aes(x = distance_rtk_m,
+                       y = elevation_m,
+                       color = as.factor(year))) +
+  geom_line() +
+  labs(title = "Elevations Along Transect Line by Year",
+       x = "distance along transect (m)",
+       y = "elevation (m)",
+        color = "year") #+ 
+  # annotate(
+  #   "rect",
+  #   xmin = 1500, xmax = 2400,  
+  #   ymin = -1.5, ymax = 1.5, 
+  #   color = "red",       
+  #   fill = NA,           
+  #   size = 1             
+  # )
+
 
 #compare 2024 to 2025
 elevdata |>
@@ -58,29 +77,157 @@ elevdata |>
   geom_line() +
   coord_cartesian(xlim = c(1500,2400),
                   ylim = c(-1.5,1.5)) +
-  ggrepel::geom_label_repel(data = subset(elevdata, 
-                                         TransectPoint_ID == 2100),
-                           mapping = aes(label = elevation_m,
-                                         fill = as.factor(year)),
-                           color = "white",
-                           show.legend = FALSE) +
-  geom_vline(
-    xintercept = 2100,
-    linetype = "dotted",
-    color = "black"
-  )
+  labs(title = "Elevations Along Transect Line by Year",
+       x = "distance along transect (m)",
+       y = "elevation (m)",
+       color = "year")
+  
+  # ggrepel::geom_label_repel(data = subset(elevdata, 
+  #                                         TransectPoint_ID == 2100),
+  #                           mapping = aes(label = elevation_m,
+  #                                         fill = as.factor(year)),
+  #                           color = "white",
+  #                           show.legend = FALSE) +
+  # geom_vline(
+  #   xintercept = 2100,
+  #   linetype = "dotted",
+  #   color = "black",
+  #   alpha = .5
+  # )
+
+
+elevdata |>
+  filter(year >= 2024) |> 
+  ggplot(mapping = aes(x = distance_rtk_m,
+                       y = elevation_m,
+                       color = as.factor(year))) +
+  geom_line() +
+  coord_cartesian(xlim = c(2000,2400),
+                  ylim = c(-1.5,1.5)) +
+  ggrepel::geom_label_repel(data = subset(filter(elevdata, year>=2024),
+                                          TransectPoint_ID == 2150),
+                            mapping = aes(label = elevation_m,
+                                          fill = as.factor(year)),
+                            color = "white",
+                            show.legend = FALSE) +
+  geom_vline(xintercept = 2150,
+             linetype = "dotted",
+             color = "black",
+             alpha = .5) +
+  ggrepel::geom_label_repel(data = subset(filter(elevdata, year>=2024),
+                                          TransectPoint_ID == 2250),
+                            mapping = aes(label = elevation_m,
+                                          fill = as.factor(year)),
+                            color = "white",
+                            show.legend = FALSE) +
+  geom_vline(xintercept = 2250,
+             linetype = "dotted",
+             color = "black",
+             alpha = .5) +
+  labs(title = "Elevation Shift on Lower End of the Transect Between 2024 and 2025",
+       x = "distance along transect (m)",
+       y = "elevation (m)",
+       color = "year")
 
 
 
+
+
+
+# #generate difference column between 2025 and previous year 
+# elevdata |>
+#   select(TransectPoint_ID, year, elevation_m) |>
+#   drop_na() |>
+#   pivot_wider(
+#     names_from = year,
+#     values_from = elevation_m
+#   ) |>
+#   drop_na() |>
+#   mutate(diff25_24 = `2025` - `2024`) |>
+#   ggplot(mapping = aes(x = TransectPoint_ID,
+#                        y = diff25_24)) +
+#   geom_line() +
+#   geom_hline(yintercept = 0,
+#              linetype = "dashed",
+#              alpha = .5)
 
 
 #generate difference column between 2025 and previous year 
-# elevdata |>
-#   filter(!is.na(TransectPoint_ID),
-#          year >= 2024) |>
-#   group_by(TransectPoint_ID) |> 
-#   summarise(difference = year[])
-#   View()
+# make more granular by binning distance_rtk_m
+elevdata |>
+  select(year, elevation_m, distance_rtk_m) |>
+  mutate(distance_bin = cut(distance_rtk_m, 
+                            breaks = seq(0, max(distance_rtk_m) + 5, by = 5),
+                            right = FALSE,       
+                            labels = seq(0, max(distance_rtk_m), by = 5))) |>
+  select(-distance_rtk_m) |>
+  pivot_wider(
+    names_from = year,
+    values_from = elevation_m,
+    values_fn = mean
+  ) |>
+  select(distance_bin, `2024`, `2025`) |>
+  drop_na() |>
+  mutate(diff25_24 = `2025` - `2024`) |>
+  ggplot(aes(x = as.numeric(as.character(distance_bin)),
+             y = diff25_24,
+             fill = diff25_24 > 0)) +
+  geom_col(width = 4) +  
+  geom_hline(yintercept = 0, linetype = "dashed", alpha = 0.5) +
+  scale_fill_manual(values = c("TRUE" = "blue", "FALSE" = "red"), guide = "none") +
+  labs(title = "Difference in Elevation From 2024 to 2025",
+       x = "Distance along transect (m)",
+       y = "Elevation in 2025 - Elevation in 2024 (m)")
+
+#now 2025-2018
+elevdata |>
+  select(year, elevation_m, distance_rtk_m) |>
+  mutate(distance_bin = cut(distance_rtk_m, 
+                            breaks = seq(0, max(distance_rtk_m) + 5, by = 5),
+                            right = FALSE,       
+                            labels = seq(0, max(distance_rtk_m), by = 5))) |>
+  select(-distance_rtk_m) |>
+  pivot_wider(
+    names_from = year,
+    values_from = elevation_m,
+    values_fn = mean
+  ) |>
+  select(distance_bin, `2018`, `2025`) |>
+  drop_na() |>
+  mutate(diff25_18 = `2025` - `2018`) |>
+  ggplot(aes(x = as.numeric(as.character(distance_bin)),
+             y = diff25_18,
+             fill = diff25_18 > 0)) +
+  geom_col(width = 4) +  
+  geom_hline(yintercept = 0, linetype = "dashed", alpha = 0.5) +
+  scale_fill_manual(values = c("TRUE" = "blue", "FALSE" = "red"), guide = "none") +
+  labs(title = "Difference in Elevation From 2018 to 2025",
+       x = "Distance along transect (m)",
+       y = "Elevation in 2025 - Elevation in 2018 (m)")
+
+
+#now 2024-2018
+elevdata |>
+  select(year, elevation_m, distance_rtk_m) |>
+  mutate(distance_rounded = round(distance_rtk_m, 0)) |>
+  select(-distance_rtk_m) |>
+  pivot_wider(
+    names_from = year,
+    values_from = elevation_m,
+    values_fn = mean
+  ) |>
+  select(distance_rounded, `2018`, `2024`) |>
+  drop_na() |>
+  mutate(diff24_18 = `2024` - `2018`) |>
+  ggplot(mapping = aes(x = distance_rounded,
+                       y = diff24_18)) +
+  geom_line() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed",
+             alpha = .5) +
+  labs(title = "Calculated Difference in Elevation From 2018 to 2024",
+       x = "distance along transect (m)",
+       y = "elevation in 2024 - elevation in 2018 (m)")
 
 #-----------------------04 Basic Exploratory Plots -----------------------------------
 

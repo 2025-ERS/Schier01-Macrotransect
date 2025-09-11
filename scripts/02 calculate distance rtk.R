@@ -25,12 +25,16 @@ edata <- read_csv(rawelevdatalink2025)
 
 #-----------------------03 Calculate distance_rtk_m -----------------------------------
 
-ymax<-max(edata$Y)
-xmin<-min(edata$X)
+y170 <- edata |> 
+  filter(`transect point id`==170) |>
+  pull(Y)
+x170 <-edata |> 
+  filter(`transect point id`==170) |>
+  pull(X)
 
-edata$distance_rtk_m<-sqrt((ymax-edata$Y)^2+(edata$X-xmin)^2)+170 # calculate actual distance covered with gps
+edata$distance_rtk_m<-sqrt((y170-edata$Y)^2+(edata$X-x170)^2)+170 # calculate actual distance covered with gps
 
-with(edata,plot(distance_rtk_m,Z,type="l")) # plot actual distance covered with transect to elevation difference
+with(edata,plot(distance_rtk_m,elevation,type="l")) # plot actual distance covered with transect to elevation difference
 
 write_csv(edata, "distance_rtk_output_2025.csv")
 
