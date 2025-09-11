@@ -41,6 +41,8 @@ elevdata |>
                        y = elevation_m)) +
   geom_line()
 
+ggsave("figures/line_plot_2025_elevation_m.png", width=1920/300,height=1080/300,dpi=300, units="in")
+
 #first look at all years elevation data
 elevdata |>
   ggplot(mapping = aes(x = distance_rtk_m,
@@ -129,6 +131,8 @@ elevdata |>
        y = "elevation (m)",
        color = "year")
 
+#ggsave("figures/line_plot_2025_v_2024_elevation.png", width=1920/300,height=1080/300,dpi=300, units="in")
+
 
 
 
@@ -179,6 +183,11 @@ elevdata |>
        x = "Distance along transect (m)",
        y = "Elevation in 2025 - Elevation in 2024 (m)")
 
+#ggsave("figures/calc_diff_2025_2024_elevation.png", width=1920/300,height=1080/300,dpi=300, units="in")
+
+
+
+
 #now 2025-2018
 elevdata |>
   select(year, elevation_m, distance_rtk_m) |>
@@ -204,6 +213,9 @@ elevdata |>
   labs(title = "Difference in Elevation From 2018 to 2025",
        x = "Distance along transect (m)",
        y = "Elevation in 2025 - Elevation in 2018 (m)")
+
+#ggsave("figures/line_plot_2025_v_2018_elevation.png", width=1920/300,height=1080/300,dpi=300, units="in")
+
 
 
 #now 2024-2018
