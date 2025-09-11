@@ -50,15 +50,15 @@ elevdata |>
   labs(title = "Elevations Along Transect Line by Year",
        x = "distance along transect (m)",
        y = "elevation (m)",
-        color = "year") #+ 
-  # annotate(
-  #   "rect",
-  #   xmin = 1500, xmax = 2400,  
-  #   ymin = -1.5, ymax = 1.5, 
-  #   color = "red",       
-  #   fill = NA,           
-  #   size = 1             
-  # )
+        color = "year") + 
+  annotate(
+    "rect",
+    xmin = 150, xmax = 1000,
+    ymin = -.5, ymax = 3.2,
+    color = "red",
+    fill = NA,
+    size = 1
+  )
 
 
 #compare 2024 to 2025
@@ -75,8 +75,8 @@ elevdata |>
                        y = elevation_m,
                        color = as.factor(year))) +
   geom_line() +
-  coord_cartesian(xlim = c(1500,2400),
-                  ylim = c(-1.5,1.5)) +
+  coord_cartesian(xlim = c(150,1000),
+                  ylim = c(-.5,3.2)) +
   labs(title = "Elevations Along Transect Line by Year",
        x = "distance along transect (m)",
        y = "elevation (m)",
