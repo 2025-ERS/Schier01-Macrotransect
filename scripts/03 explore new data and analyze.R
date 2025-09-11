@@ -55,12 +55,14 @@ elevdata |>
         color = "year") + 
   annotate(
     "rect",
-    xmin = 150, xmax = 1000,
-    ymin = -.5, ymax = 3.2,
+    xmin = 1500, xmax = 2500,
+    ymin = -1.5, ymax = 1.5,
     color = "red",
     fill = NA,
     size = 1
   )
+
+#ggsave("figures/allyears_lineplot_redbox_lowtrans.png", width=1920/300,height=1080/300,dpi=300, units="in")
 
 
 #compare 2024 to 2025
@@ -77,12 +79,15 @@ elevdata |>
                        y = elevation_m,
                        color = as.factor(year))) +
   geom_line() +
-  coord_cartesian(xlim = c(150,1000),
-                  ylim = c(-.5,3.2)) +
+  coord_cartesian(xlim = c(1500,2500),
+                  ylim = c(-1.5,1.5)) +
   labs(title = "Elevations Along Transect Line by Year",
        x = "distance along transect (m)",
        y = "elevation (m)",
        color = "year")
+
+#ggsave("figures/allyears_lineplot_zoomedin_lowtrans.png", width=1920/300,height=1080/300,dpi=300, units="in")
+
   
   # ggrepel::geom_label_repel(data = subset(elevdata, 
   #                                         TransectPoint_ID == 2100),
