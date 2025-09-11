@@ -219,28 +219,4 @@ elevdata |>
 
 
 
-#now 2024-2018
-elevdata |>
-  select(year, elevation_m, distance_rtk_m) |>
-  mutate(distance_rounded = round(distance_rtk_m, 0)) |>
-  select(-distance_rtk_m) |>
-  pivot_wider(
-    names_from = year,
-    values_from = elevation_m,
-    values_fn = mean
-  ) |>
-  select(distance_rounded, `2018`, `2024`) |>
-  drop_na() |>
-  mutate(diff24_18 = `2024` - `2018`) |>
-  ggplot(mapping = aes(x = distance_rounded,
-                       y = diff24_18)) +
-  geom_line() +
-  geom_hline(yintercept = 0,
-             linetype = "dashed",
-             alpha = .5) +
-  labs(title = "Calculated Difference in Elevation From 2018 to 2024",
-       x = "distance along transect (m)",
-       y = "elevation in 2024 - elevation in 2018 (m)")
-
-
 
