@@ -19,6 +19,7 @@ if (!requireNamespace("ggrepel", quietly = TRUE)) {install.packages("ggrepel")}
 # Load the libraries that you will use in this script. Only load the libraries that you will actually use!
 library(tidyverse)
 library(ggrepel)# load the tidyverse libraries, including readr and ggplot2
+library(patchwork)
 
 #-----------------------02 Import Data Tables from Google Sheet -----------------------------------
 # link to "01-Macortransect" = "https://docs.google.com/spreadsheets/d/1UmpZoNIjo5lXdcpGKuBHe7wFX1Z3AQioeHjzrFgYnxo/edit?gid=1550309563#gid=1550309563"
@@ -41,29 +42,43 @@ elevdata |>
                        y = elevation_m)) +
   geom_line()
 
-ggsave("figures/line_plot_2025_elevation_m.png", width=1920/300,height=1080/300,dpi=300, units="in")
+#ggsave("figures/line_plot_2025_elevation_m.png", width=1920/300,height=1080/300,dpi=300, units="in")
 
 #first look at all years elevation data
-elevdata |>
+p1 <- elevdata |>
   ggplot(mapping = aes(x = distance_rtk_m,
                        y = elevation_m,
                        color = as.factor(year))) +
   geom_line() +
   labs(title = "Elevations Along Transect Line by Year",
-       x = "distance along transect (m)",
-       y = "elevation (m)",
-        color = "year") + 
+       y = "Elevation (m)",
+        color = "Year") + 
   annotate(
     "rect",
-    xmin = 1500, xmax = 2500,
-    ymin = -1.5, ymax = 1.5,
+    xmin = 600, xmax = 1200,
+    ymin = .25, ymax = 1.5,
     color = "red",
     fill = NA,
-    size = 1
-  )
+    size = .5
+  ) +
+  xlab(NULL)
 
 #ggsave("figures/allyears_lineplot_redbox_lowtrans.png", width=1920/300,height=1080/300,dpi=300, units="in")
 
+#compare transect point 2100 across all the years with labels
+p2 <- elevdata |>
+  ggplot(mapping = aes(x = distance_rtk_m,
+                       y = elevation_m,
+                       color = as.factor(year))) +
+  geom_line() +
+  coord_cartesian(xlim = c(600,1200),
+                  ylim = c(.25,1.5)) +
+  labs(x = "Distance along transect (m)",
+       y = "Elevation (m)",
+       color = "Year") +
+  theme(legend.position = "none")
+
+p1/p2
 
 #compare 2024 to 2025
 elevdata |>
@@ -73,18 +88,6 @@ elevdata |>
                        color = as.factor(year))) +
   geom_line()
 
-#compare transect point 2100 across all the years with labels
-elevdata |>
-  ggplot(mapping = aes(x = distance_rtk_m,
-                       y = elevation_m,
-                       color = as.factor(year))) +
-  geom_line() +
-  coord_cartesian(xlim = c(1500,2500),
-                  ylim = c(-1.5,1.5)) +
-  labs(title = "Elevations Along Transect Line by Year",
-       x = "distance along transect (m)",
-       y = "elevation (m)",
-       color = "year")
 
 #ggsave("figures/allyears_lineplot_zoomedin_lowtrans.png", width=1920/300,height=1080/300,dpi=300, units="in")
 
